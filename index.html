@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Emirates AI Navigator Pro</title>
+<style>
+:root{
+--bg:#f2f6fc;--card:#fff;--text:#13253c;
+--muted:#63758b;--line:#dce6f0;
+--primary:#087f91;--sidebar:#081f38;
+}
+body.dark{
+--bg:#0c1729;--card:#182940;--text:#f2f7ff;
+--muted:#afbed0;--line:#34465d;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+font-family:Tahoma,Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{border:0;border-radius:10px;padding:11px 16px;
+background:var(--primary);color:white;cursor:pointer}
+button:hover{filter:brightness(1.1)}
+.layout{display:flex;min-height:100vh}
+aside{width:255px;flex-shrink:0;background:var(--sidebar);
+color:white;padding:20px 13px}
+.logo{font-size:20px;font-weight:bold;padding:10px}
+.logo small{display:block;font-size:11px;color:#b5d5e7;
+margin-top:10px;line-height:1.8}
+nav a{display:block;padding:12px;color:#d8e8f5;
+text-decoration:none;border-radius:10px;margin:4px 0}
+nav a:hover,nav a.active{background:#17637d}
+main{flex:1;min-width:0}
+header{display:flex;justify-content:space-between;
+align-items:center;flex-wrap:wrap;gap:10px;
+background:var(--card);padding:15px 23px;
+border-bottom:1px solid var(--line)}
+.content{padding:23px;max-width:1400px;margin:auto}
+.hero{background:linear-gradient(120deg,#092a49,#07899b);
+color:white;padding:38px;border-radius:22px;margin-bottom:20px}
+.hero h1{font-size:clamp(26px,4vw,42px)}
+.hero p{line-height:1.9;max-width:780px}
+.grid{display:grid;grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.card{background:var(--card);padding:22px;
+border:1px solid var(--line);border-radius:16px;
+margin-bottom:17px;box-shadow:0 5px 20px #00000008}
+.card h3{margin-top:0}
+.muted{color:var(--muted);line-height:1.8}
+.metric{font-size:34px;font-weight:bold;color:var(--primary)}
+.page{display:none}
+.page.active{display:block;animation:fade .25s}
+@keyframes fade{from{opacity:.3}to{opacity:1}}
+label{display:block;font-weight:bold;margin:13px 0 6px}
+input,select,textarea{width:100%;padding:12px;
+background:var(--card);color:var(--text);
+border:1px solid var(--line);border-radius:10px}
+textarea{min-height:100px;resize:vertical}
+.row{display:flex;gap:13px;flex-wrap:wrap}
+.row>*{flex:1;min-width:180px}
+.result{background:var(--bg);border:1px solid var(--line);
+border-radius:12px;padding:15px;margin:12px 0;line-height:1.8}
+.bar{height:13px;background:var(--line);
+border-radius:20px;overflow:hidden;margin:8px 0}
+.bar div{height:100%;background:linear-gradient(90deg,#16bba1,#087f91)}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th,td{padding:12px;border-bottom:1px solid var(--line);
+text-align:start}
+.notice{padding:15px;border-inline-start:4px solid #d3a23c;
+background:var(--card);border-radius:10px;
+margin-bottom:18px;line-height:1.8}
+.chat{height:260px;overflow:auto;background:var(--bg);
+border:1px solid var(--line);border-radius:12px;padding:12px}
+.message{padding:12px;background:var(--card);
+border:1px solid var(--line);border-radius:12px;margin:9px 0}
+.message.user{border-inline-start:4px solid var(--primary)}
+.tag{display:inline-block;padding:6px 12px;border-radius:30px;
+background:#d9f6ee;color:#08634f;font-size:12px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}
+.danger{background:#a83e4d}
+footer{text-align:center;color:var(--muted);padding:25px}
+@media(max-width:800px){
+.layout{display:block}
+aside{width:100%;padding:10px}
+nav{display:flex;overflow-x:auto;gap:5px}
+nav a{white-space:nowrap;font-size:12px}
+.content{padding:12px}
+.hero{padding:25px}
+}
+@media print{
+aside,header,.actions,.notice{display:none!important}
+.layout{display:block}
+.page{display:none!important}
+#reports{display:block!important}
+body{background:white;color:black}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside>
+<div class="logo">🇦🇪 Emirates AI Navigator
+<small data-ar="مشاركة طلاب مدرسة منار الإيمان الخاصة في مسابقة الهاكاثون"
+data-en="Al Manar Al Iman Private School Students — Hackathon">
+مشاركة طلاب مدرسة منار الإيمان الخاصة في مسابقة الهاكاثون
+</small></div>
+<nav>
+<a href="#home" data-ar="الرئيسية" data-en="Home">الرئيسية</a>
+<a href="#dashboard" data-ar="لوحة التحكم" data-en="Dashboard">لوحة التحكم</a>
+<a href="#registry" data-ar="سجل النماذج" data-en="Model Registry">سجل النماذج</a>
+<a href="#evaluate" data-ar="التقييم الذكي" data-en="Evaluation">التقييم الذكي</a>
+<a href="#compare" data-ar="المقارنة" data-en="Comparison">المقارنة</a>
+<a href="#assistant" data-ar="المساعد المعرفي" data-en="Knowledge Assistant">المساعد المعرفي</a>
+<a href="#policies" data-ar="السياسات" data-en="Policies">السياسات</a>
+<a href="#reports" data-ar="التقارير" data-en="Reports">التقارير</a>
+<a href="#about" data-ar="عن المشروع" data-en="About">عن المشروع</a>
+</nav>
+</aside>
+
+<main>
+<header>
+<strong>Emirates AI Navigator Pro</strong>
+<div>
+<button id="langBtn" onclick="changeLanguage()">English</button>
+<button id="themeBtn" onclick="toggleTheme()">🌙</button>
+</div>
+</header>
+<div class="content">
+<div class="notice" data-ar="هذه منصة تجريبية للهاكاثون. البيانات والنتائج توضيحية ولا تمثل اعتمادًا حكوميًا."
+data-en="Hackathon prototype. Data and scores are illustrative, not official government certification.">
+هذه منصة تجريبية للهاكاثون. البيانات والنتائج توضيحية ولا تمثل اعتمادًا حكوميًا.
+</div>
+
+<section id="home" class="page">
+<div class="hero">
+<span class="tag">HACKATHON 2026</span>
+<h1 data-ar="مستقبل أذكى لاتخاذ القرارات"
+data-en="Smarter Decisions for the Future">
+مستقبل أذكى لاتخاذ القرارات</h1>
+<p data-ar="منصة تفاعلية تساعد المؤسسات على تنظيم تقييم نماذج الذكاء الاصطناعي ومقارنتها ومراجعة اعتبارات الأداء والأمان والامتثال."
+data-en="An interactive platform for organizing AI model evaluations, comparisons and reviews of performance, security and compliance.">
+منصة تفاعلية تساعد المؤسسات على تنظيم تقييم نماذج الذكاء الاصطناعي ومقارنتها ومراجعة اعتبارات الأداء والأمان والامتثال.
+</p>
+<button onclick="location.hash='evaluate'"
+data-ar="ابدأ التقييم" data-en="Start Evaluation">ابدأ التقييم</button>
+</div>
+<div class="grid">
+<div class="card"><h3>🧠 Evaluation</h3>
+<p class="muted" data-ar="حساب نتائج متعددة المعايير."
+data-en="Multi-criteria scoring.">حساب نتائج متعددة المعايير.</p></div>
+<div class="card"><h3>⚖️ Comparison</h3>
+<p class="muted" data-ar="مقارنة مرئية بين النماذج."
+data-en="Visual model comparison.">مقارنة مرئية بين النماذج.</p></div>
+<div class="card"><h3>📚 Knowledge</h3>
+<p class="muted" data-ar="إرشادات بحثية تجريبية."
+data-en="Searchable demo guidance.">إرشادات بحثية تجريبية.</p></div>
+</div>
+</section>
+
+<section id="dashboard" class="page">
+<h2 data-ar="لوحة التحكم" data-en="Dashboard">لوحة التحكم</h2>
+<div class="grid">
+<div class="card"><p data-ar="عدد التقييمات" data-en="Evaluations">عدد التقييمات</p><div id="count" class="metric">0</div></div>
+<div class="card"><p data-ar="متوسط النتائج" data-en="Average Score">متوسط النتائج</p><div id="average" class="metric">—</div></div>
+<div class="card"><p data-ar="هدف تقليل الوقت" data-en="Time Reduction Target">هدف تقليل الوقت</p><div class="metric">80%</div></div>
+<div class="card"><p data-ar="هدف الامتثال" data-en="Compliance Target">هدف الامتثال</p><div class="metric">100%</div></div>
+</div>
+<div class="card"><h3 data-ar="أحدث التقييمات" data-en="Recent Evaluations">أحدث التقييمات</h3><div id="recent"></div></div>
+</section>
+
+<section id="registry" class="page">
+<h2 data-ar="سجل نماذج الذكاء الاصطناعي" data-en="AI Model Registry">سجل نماذج الذكاء الاصطناعي</h2>
+<div class="card">
+<p class="muted" data-ar="السجل يحتوي على أمثلة افتراضية بالإضافة إلى التقييمات التي تضيفها."
+data-en="Registry includes fictional examples and your saved evaluations.">
+السجل يحتوي على أمثلة افتراضية بالإضافة إلى التقييمات التي تضيفها.</p>
+<input id="registrySearch" oninput="renderRegistry()" placeholder="Search / بحث">
+<div id="registryResults" class="tablewrap"></div>
+</div>
+</section>
+
+<section id="evaluate" class="page">
+<h2 data-ar="تقييم نموذج جديد" data-en="Evaluate a New Model">تقييم نموذج جديد</h2>
+<div class="card">
+<label data-ar="اسم النموذج" data-en="Model Name">اسم النموذج</label>
+<input id="modelName" maxlength="80" placeholder="Model X">
+<label data-ar="حالة الاستخدام" data-en="Use Case">حالة الاستخدام</label>
+<select id="useCase">
+<option value="documents" data-ar="تحليل الوثائق" data-en="Document Analysis">تحليل الوثائق</option>
+<option value="service" data-ar="خدمة المتعاملين" data-en="Customer Service">خدمة المتعاملين</option>
+<option value="translation" data-ar="الترجمة" data-en="Translation">الترجمة</option>
+<option value="research" data-ar="البحث المعرفي" data-en="Knowledge Search">البحث المعرفي</option>
+</select>
+<p class="muted" data-ar="أدخل درجات مستندة إلى اختباراتك. الأوزان تجريبية وليست معايير رسمية."
+data-en="Enter scores from your tests. Weights are illustrative, not official standards.">
+أدخل درجات مستندة إلى اختباراتك. الأوزان تجريبية وليست معايير رسمية.</p>
+<div class="grid">
+<div><label data-ar="الأداء" data-en="Performance">الأداء</label><input id="performance" type="range" min="0" max="100" value="85" oninput="sliders()"><output id="pv">85</output></div>
+<div><label data-ar="الأمان" data-en="Security">الأمان</label><input id="security" type="range" min="0" max="100" value="90" oninput="sliders()"><output id="sv">90</output></div>
+<div><label data-ar="الامتثال" data-en="Compliance">الامتثال</label><input id="compliance" type="range" min="0" max="100" value="88" oninput="sliders()"><output id="cv">88</output></div>
+<div><label data-ar="كفاءة التكلفة" data-en="Cost Efficiency">كفاءة التكلفة</label><input id="cost" type="range" min="0" max="100" value="80" oninput="sliders()"><output id="tv">80</output></div>
+</div>
+<label data-ar="ملاحظات التقييم" data-en="Evaluation Notes">ملاحظات التقييم</label>
+<textarea id="notes" maxlength="1000"></textarea>
+<button onclick="evaluateModel()" data-ar="احسب واحفظ النتيجة" data-en="Calculate and Save">احسب واحفظ النتيجة</button>
+<div id="evaluationOutput" aria-live="polite"></div>
+</div>
+</section>
+
+<section id="compare" class="page">
+<h2 data-ar="مقارنة النماذج" data-en="Compare Models">مقارنة النماذج</h2>
+<div class="card">
+<div class="row">
+<div><label data-ar="النموذج الأول" data-en="First Model">النموذج الأول</label><select id="compareA" onchange="compare()"></select></div>
+<div><label data-ar="النموذج الثاني" data-en="Second Model">النموذج الثاني</label><select id="compareB" onchange="compare()"></select></div>
+</div>
+<div id="compareOutput"></div>
+</div>
+</section>
+
+<section id="assistant" class="page">
+<h2 data-ar="المساعد المعرفي" data-en="Knowledge Assistant">المساعد المعرفي</h2>
+<div class="card">
+<p class="muted" data-ar="مساعد تجريبي قائم على قواعد مبرمجة، وليس متصلًا بنموذج ذكاء اصطناعي حقيقي."
+data-en="Rule-based demo assistant, not connected to a real AI model.">
+مساعد تجريبي قائم على قواعد مبرمجة، وليس متصلًا بنموذج ذكاء اصطناعي حقيقي.</p>
+<div id="chat" class="chat"></div>
+<textarea id="question" placeholder="اسأل عن الأمان أو الأداء أو الامتثال"></textarea>
+<div class="actions"><button onclick="ask()" data-ar="إرسال السؤال" data-en="Send Question">إرسال السؤال</button></div>
+</div>
+</section>
+
+<section id="policies" class="page">
+<h2 data-ar="مكتبة الإرشادات والسياسات" data-en="Guidance and Policy Library">مكتبة الإرشادات والسياسات</h2>
+<div class="card">
+<p class="muted" data-ar="محتوى توضيحي عام وليس نصوص سياسات حكومية رسمية."
+data-en="General illustrative content, not official government policy text.">
+محتوى توضيحي عام وليس نصوص سياسات حكومية رسمية.</p>
+<input id="policySearch" oninput="renderPolicies()" placeholder="Search / بحث">
+<div id="policyResults"></div>
+</div>
+</section>
+
+<section id="reports" class="page">
+<h2 data-ar="تقارير التقييم" data-en="Evaluation Reports">تقارير التقييم</h2>
+<div class="card">
+<div class="actions">
+<button onclick="exportJSON()">Export JSON</button>
+<button onclick="exportCSV()">Export CSV</button>
+<button onclick="window.print()" data-ar="طباعة" data-en="Print">طباعة</button>
+<button class="danger" onclick="clearReports()" data-ar="حذف التقارير" data-en="Delete Reports">حذف التقارير</button>
+</div>
+<div id="reportResults"></div>
+</div>
+</section>
+
+<section id="about" class="page">
+<div class="hero">
+<h1>Emirates AI Navigator Pro</h1>
+<p data-ar="مشروع من مشاركة طلاب مدرسة منار الإيمان الخاصة في مسابقة الهاكاثون، لتقديم نموذج أولي يساعد على تنظيم تقييم نماذج الذكاء الاصطناعي."
+data-en="A hackathon prototype by students of Al Manar Al Iman Private School to organize AI model evaluations.">
+مشروع من مشاركة طلاب مدرسة منار الإيمان الخاصة في مسابقة الهاكاثون، لتقديم نموذج أولي يساعد على تنظيم تقييم نماذج الذكاء الاصطناعي.</p>
+</div>
+<div class="card">
+<h3 data-ar="التقنيات المستخدمة" data-en="Technologies">التقنيات المستخدمة</h3>
+<p>HTML5 • CSS3 • JavaScript • LocalStorage • JSON • CSV</p>
+<p class="muted" data-ar="الموقع يعمل محليًا ولا يتصل ببيانات حكومية أو خوادم خارجية."
+data-en="This website runs locally without government data or external servers.">
+الموقع يعمل محليًا ولا يتصل ببيانات حكومية أو خوادم خارجية.</p>
+</div>
+</section>
+</div>
+<footer>© 2026 Emirates AI Navigator Pro — Hackathon</footer>
+</main>
+</div>
+
+<script>
+let language="ar";
+const KEY="emirates_ai_pro_reports";
+let reports=[];
+try{
+const saved=JSON.parse(localStorage.getItem(KEY)||"[]");
+reports=Array.isArray(saved)?saved:[];
+}catch(e){reports=[]}
+
+const demo=[
+{name:"Model A",performance:88,security:92,compliance:90,cost:82,useCase:"documents"},
+{name:"Model B",performance:94,security:85,compliance:87,cost:78,useCase:"service"},
+{name:"Model C",performance:83,security:96,compliance:95,cost:91,useCase:"translation"}
+];
+
+const policies=[
+{ar:"حماية البيانات",en:"Data Protection",
+descAr:"تصنيف البيانات وتقييد الوصول والتشفير ومراجعة الخصوصية.",
+descEn:"Data classification, access control, encryption and privacy review."},
+{ar:"حوكمة الذكاء الاصطناعي",en:"AI Governance",
+descAr:"تحديد المسؤوليات والمراجعة البشرية وتوثيق القرارات.",
+descEn:"Accountability, human oversight and decision documentation."},
+{ar:"اختبارات الأداء",en:"Performance Testing",
+descAr:"قياس الدقة والسرعة والموثوقية في حالات استخدام ممثلة.",
+descEn:"Measure accuracy, latency and reliability on representative tasks."},
+{ar:"إدارة المخاطر",en:"Risk Management",
+descAr:"تحديد المخاطر ووضع خطط التخفيف والمتابعة.",
+descEn:"Identify risks, mitigation plans and monitoring."},
+{ar:"الشفافية",en:"Transparency",
+descAr:"توثيق حدود النماذج والاختبارات ومصادر البيانات.",
+descEn:"Document model limitations, testing and data sources."}
+];
+
+function t(ar,en){return language==="ar"?ar:en}
+function escapeHTML(v){
+return String(v).replace(/[&<>"']/g,c=>({
+"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+})[c]);
+}
+function score(m){
+return Math.round(m.performance*.35+m.security*.30+
+m.compliance*.25+m.cost*.10);
+}
+function allModels(){return [...demo,...reports]}
+function persist(){
+try{localStorage.setItem(KEY,JSON.stringify(reports));return true}
+catch(e){return false}
+}
+function changeLanguage(){
+language=language==="ar"?"en":"ar";
+document.documentElement.lang=language;
+document.documentElement.dir=language==="ar"?"rtl":"ltr";
+document.getElementById("langBtn").textContent=
+language==="ar"?"English":"العربية";
+document.querySelectorAll("[data-ar][data-en]").forEach(el=>{
+el.textContent=el.dataset[language];
+});
+renderAll();
+}
+function toggleTheme(){
+document.body.classList.toggle("dark");
+document.getElementById("themeBtn").textContent=
+document.body.classList.contains("dark")?"☀️":"🌙";
+}
+const pages=["home","dashboard","registry","evaluate",
+"compare","assistant","policies","reports","about"];
+function route(){
+let page=location.hash.slice(1);
+if(!pages.includes(page))page="home";
+document.querySelectorAll(".page").forEach(el=>
+el.classList.toggle("active",el.id===page));
+document.querySelectorAll("nav a").forEach(el=>
+el.classList.toggle("active",el.getAttribute("href")==="#"+page));
+}
+window.addEventListener("hashchange",route);
+
+function sliders(){
+["performance","security","compliance","cost"].forEach((id,i)=>{
+document.getElementById(["pv","sv","cv","tv"][i]).textContent=
+document.getElementById(id).value;
+});
+}
+function evaluateModel(){
+const name=document.getElementById("modelName").value.trim();
+const out=document.getElementById("evaluationOutput");
+if(!name){out.textContent=t("أدخل اسم النموذج.","Enter a model name.");return}
+const m={
+name,
+useCase:document.getElementById("useCase").value,
+performance:Number(document.getElementById("performance").value),
+security:Number(document.getElementById("security").value),
+compliance:Number(document.getElementById("compliance").value),
+cost:Number(document.getElementById("cost").value),
+notes:document.getElementById("notes").value.trim(),
+date:new Date().toISOString()
+};
+reports.push(m);
+const stored=persist();
+const total=score(m);
+const status=(m.security<80||m.compliance<80)?
+t("يتطلب مراجعة","Requires review"):
+total>=90?t("نتيجة تجريبية مرتفعة","High demo score"):
+t("قابل للتحسين","Needs improvement");
+out.innerHTML=`<div class="result">
+<h3>${escapeHTML(m.name)}</h3>
+<strong>${t("النتيجة","Score")}: ${total}%</strong>
+<div class="bar"><div style="width:${total}%"></div></div>
+<p>${status}</p>
+<small>${t("ليست شهادة امتثال أو اعتماد رسمي.",
+"Not an official certification or compliance assessment.")}</small>
+${stored?"":`<p>${t("تعذر حفظ البيانات في المتصفح.",
+"Browser storage is unavailable.")}</p>`}
+</div>`;
+renderAll();
+}
+function renderDashboard(){
+document.getElementById("count").textContent=reports.length;
+document.getElementById("average").textContent=reports.length?
+Math.round(reports.reduce((sum,m)=>sum+score(m),0)/reports.length)+"%":"—";
+const out=document.getElementById("recent");
+out.replaceChildren();
+if(!reports.length){
+out.textContent=t("لا توجد تقييمات بعد.","No evaluations yet.");
+return;
+}
+reports.slice(-5).reverse().forEach(m=>{
+const div=document.createElement("div");
+div.className="result";
+div.textContent=m.name+" — "+score(m)+"%";
+out.appendChild(div);
+});
+}
+function renderRegistry(){
+const q=document.getElementById("registrySearch").value.toLowerCase();
+const models=allModels().filter(m=>
+m.name.toLowerCase().includes(q)||m.useCase.toLowerCase().includes(q));
+const out=document.getElementById("registryResults");
+out.replaceChildren();
+const table=document.createElement("table");
+const thead=document.createElement("thead");
+const tr=document.createElement("tr");
+[t("النموذج","Model"),t("الاستخدام","Use Case"),
+t("النتيجة","Score"),t("النوع","Type")].forEach(v=>{
+const th=document.createElement("th");th.textContent=v;tr.appendChild(th);
+});
+thead.appendChild(tr);table.appendChild(thead);
+const tbody=document.createElement("tbody");
+models.forEach(m=>{
+const row=document.createElement("tr");
+[m.name,m.useCase,score(m)+"%",
+demo.includes(m)?t("افتراضي","Demo"):t("مضاف","Saved")].forEach(v=>{
+const td=document.createElement("td");td.textContent=v;row.appendChild(td);
+});
+tbody.appendChild(row);
+});
+table.appendChild(tbody);out.appendChild(table);
+if(!models.length)out.textContent=t("لا توجد نتائج.","No results.");
+}
+function renderCompareOptions(){
+const models=allModels();
+const a=document.getElementById("compareA");
+const b=document.getElementById("compareB");
+const oldA=a.value,oldB=b.value;
+[a,b].forEach(select=>{
+select.replaceChildren();
+models.forEach((m,i)=>{
+const option=document.createElement("option");
+option.value=String(i);
+option.textContent=m.name;
+select.appendChild(option);
+});
+});
+a.value=oldA&&Number(oldA)<models.length?oldA:"0";
+b.value=oldB&&Number(oldB)<models.length?oldB:"1";
+compare();
+}
+function compare(){
+const models=allModels();
+const a=models[Number(document.getElementById("compareA").value)];
+const b=models[Number(document.getElementById("compareB").value)];
+const out=document.getElementById("compareOutput");
+out.replaceChildren();
+if(!a||!b)return;
+const fields=[
+["performance",t("الأداء","Performance")],
+["security",t("الأمان","Security")],
+["compliance",t("الامتثال","Compliance")],
+["cost",t("كفاءة التكلفة","Cost Efficiency")]
+];
+fields.forEach(([key,label])=>{
+const box=document.createElement("div");box.className="result";
+const heading=document.createElement("strong");heading.textContent=label;
+box.appendChild(heading);
+[a,b].forEach(m=>{
+const p=document.createElement("p");
+p.textContent=m.name+" — "+m[key]+"%";
+const bar=document.createElement("div");bar.className="bar";
+const fill=document.createElement("div");
+fill.style.width=m[key]+"%";
+bar.appendChild(fill);box.append(p,bar);
+});
+out.appendChild(box);
+});
+const total=document.createElement("div");total.className="result";
+total.textContent=t("النتيجة الإجمالية: ","Total score: ")+
+a.name+" "+score(a)+"% | "+b.name+" "+score(b)+"%";
+out.appendChild(total);
+}
+function addMessage(text,role){
+const el=document.createElement("div");
+el.className="message "+role;el.textContent=text;
+const chat=document.getElementById("chat");
+chat.appendChild(el);chat.scrollTop=chat.scrollHeight;
+}
+function ask(){
+const input=document.getElementById("question");
+const q=input.value.trim();if(!q)return;
+addMessage(q,"user");
+const lower=q.toLowerCase();
+let answer;
+if(/أمان|امن|security|خصوصية|privacy/.test(lower)){
+answer=t("يجب مراجعة حماية البيانات والتشفير والصلاحيات وسجلات التدقيق.",
+"Review data protection, encryption, permissions and audit logs.");
+}else if(/امتثال|حوكمة|compliance|governance/.test(lower)){
+answer=t("حدد المتطلبات التنظيمية المنطبقة، ووثق الأدلة، واطلب مراجعة مختصة.",
+"Identify applicable requirements, document evidence and obtain expert review.");
+}else if(/أداء|performance|تقييم|evaluation/.test(lower)){
+answer=t("اختبر الدقة والسرعة والموثوقية باستخدام بيانات ممثلة لحالة الاستخدام.",
+"Test accuracy, latency and reliability using representative cases.");
+}else{
+answer=t("أستطيع تقديم معلومات عامة عن الأداء والأمان والامتثال. هذه نسخة تجريبية.",
+"I provide basic guidance on performance, security and compliance. This is a demo.");
+}
+addMessage(answer,"bot");input.value="";
+}
+function renderPolicies(){
+const q=document.getElementById("policySearch").value.toLowerCase();
+const out=document.getElementById("policyResults");
+out.replaceChildren();let found=0;
+policies.forEach(p=>{
+if(![p.ar,p.en,p.descAr,p.descEn].join(" ").toLowerCase().includes(q))return;
+found++;
+const box=document.createElement("div");box.className="result";
+const h=document.createElement("h3");h.textContent=p[language];
+const desc=document.createElement("p");
+desc.textContent=language==="ar"?p.descAr:p.descEn;
+box.append(h,desc);out.appendChild(box);
+});
+if(!found)out.textContent=t("لا توجد نتائج.","No results.");
+}
+function renderReports(){
+const out=document.getElementById("reportResults");
+out.replaceChildren();
+if(!reports.length){
+out.textContent=t("لا توجد تقارير محفوظة.","No saved reports.");
+return;
+}
+reports.slice().reverse().forEach(m=>{
+const box=document.createElement("div");box.className="result";
+const h=document.createElement("h3");
+h.textContent=m.name+" — "+score(m)+"%";
+const p=document.createElement("p");
+p.textContent=t("الأداء","Performance")+": "+m.performance+
+" | "+t("الأمان","Security")+": "+m.security+
+" | "+t("الامتثال","Compliance")+": "+m.compliance+
+" | "+t("التكلفة","Cost")+": "+m.cost;
+const date=document.createElement("small");
+date.textContent=m.date.slice(0,10);
+box.append(h,p,date);
+if(m.notes){
+const note=document.createElement("p");note.textContent=m.notes;
+box.appendChild(note);
+}
+out.appendChild(box);
+});
+}
+function download(text,filename,type){
+const blob=new Blob([text],{type});
+const url=URL.createObjectURL(blob);
+const a=document.createElement("a");
+a.href=url;a.download=filename;
+document.body.appendChild(a);a.click();a.remove();
+setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function exportJSON(){
+download(JSON.stringify(reports,null,2),
+"ai-reports.json","application/json");
+}
+function exportCSV(){
+const fields=["name","useCase","performance","security",
+"compliance","cost","notes","date"];
+const quote=v=>'"'+String(v??"").replace(/"/g,'""')+'"';
+const rows=[fields.join(","),
+...reports.map(m=>fields.map(f=>quote(m[f])).join(","))];
+download("\uFEFF"+rows.join("\r\n"),
+"ai-reports.csv","text/csv;charset=utf-8");
+}
+function clearReports(){
+if(!confirm(t("هل تريد حذف جميع التقارير؟",
+"Delete all reports?")))return;
+reports=[];persist();renderAll();
+}
+function renderAll(){
+renderDashboard();renderRegistry();renderCompareOptions();
+renderPolicies();renderReports();
+}
+sliders();route();renderAll();
+addMessage("Emirates AI Navigator Pro — "+
+t("مرحبًا! اسأل عن الأداء أو الأمان أو الامتثال.",
+"Welcome! Ask about performance, security or compliance."),"bot");
+</script>
+</body>
+</html>
